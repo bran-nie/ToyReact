@@ -1,36 +1,52 @@
-import { ToyReact, Component } from './ToyReact';
+import { ToyReact, Component } from "./ToyReact";
 
-class MyComponent extends Component {
+window.Squares = {};
+class Square extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: "",
+        };
+    }
+    render() {
+        window.Squares[this.props["value"]] = this.range;
+        return (
+            <button
+                class="square"
+                onClick={() => this.setState({ value: "x" })}
+            >
+                {this.state.value}
+            </button>
+        );
+    }
+}
+class Board extends Component {
+    renderSquare(i) {
+        return <Square value={i} />;
+    }
     render() {
         return (
             <div>
-                <span>Hello</span>
-                <span> World!</span>
-                <div>
-                    {true}
-                    {this.children}
+                <div class="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div class="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div class="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
                 </div>
             </div>
         );
     }
 }
 
-let a = (
-    <MyComponent name="a" id="npc">
-        <div>
-            <h1>标题1</h1>
-            <p class="content">这是有趣的内容</p>
-        </div>
-    </MyComponent>
-);
-ToyReact.render(a, document.body);
+let a = <Board />;
 
-// let b = (
-//     <div name="b" id="test">
-//         <span>1</span>
-//         <span>2</span>
-//         <span>3</span>
-//     </div>
-// );
-// document.body.appendChild(b);
-// console.log(b);
+ToyReact.render(a, document.body);
