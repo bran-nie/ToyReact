@@ -7,7 +7,11 @@ class ElementWrapper {
             let eventName = RegExp.$1.toLocaleLowerCase();
             this.root.addEventListener(eventName, value);
         }
-        this.root.setAttribute(name, value);
+        if (name === "className") {
+            this.root.setAttribute("class", value);
+        } else {
+            this.root.setAttribute(name, value);
+        }
     }
     appendChild(vchild) {
         const range = document.createRange();
@@ -21,6 +25,7 @@ class ElementWrapper {
         vchild.mountTo(range);
     }
     mountTo(range) {
+        console.log("ele wrapper mountTo call");
         range.deleteContents();
         range.insertNode(this.root);
     }
@@ -31,6 +36,7 @@ class TextWrapper {
         this.root = document.createTextNode(content);
     }
     mountTo(range) {
+        console.log("text wrapper mountTo call");
         range.deleteContents();
         range.insertNode(this.root);
     }
@@ -46,6 +52,7 @@ export class Component {
         this[name] = value;
     }
     mountTo(range) {
+        console.log("component wrapper mountTo call");
         this.range = range;
         this.update();
     }
@@ -66,12 +73,15 @@ export class Component {
         this.children.push(vchild);
     }
     setState(state) {
-        console.log(state);
         let merge = (oldState, newState) => {
             for (let p in newState) {
-                if (typeof newState[p] === "object") {
+                if (typeof newState[p] === "object" && newState[p] !== null) {
                     if (typeof oldState[p] !== "object") {
-                        oldState[p] = {};
+                        if (newState[p] instanceof Array) {
+                            oldState[p] = [];
+                        } else {
+                            oldState[p] = {};
+                        }
                     }
                     merge(oldState[p], newState[p]);
                 } else {
@@ -83,7 +93,6 @@ export class Component {
             this.state = {};
         }
         merge(this.state, state);
-        console.log("this.state", this.state);
         this.update();
     }
 }
@@ -106,6 +115,9 @@ export const ToyReact = {
                 if (typeof child === "object" && child instanceof Array) {
                     insertChildren(child);
                 } else {
+                    if (child === null || child === void 0) {
+                        child = "";
+                    }
                     if (
                         !(child instanceof Component) &&
                         !(child instanceof ElementWrapper) &&
