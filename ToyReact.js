@@ -52,7 +52,7 @@ export class Component {
         this[name] = value;
     }
     mountTo(range) {
-        console.log("component wrapper mountTo call");
+        console.log("component mountTo call");
         this.range = range;
         this.update();
     }
