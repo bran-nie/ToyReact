@@ -119,7 +119,7 @@ class Game extends Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    {/* <ol>{moves}</ol> */}
                 </div>
             </div>
         );
@@ -150,6 +150,7 @@ function calculateWinner(squares) {
     return null;
 }
 
-let a = <Game />;
+let game = <Game />;
 
-ToyReact.render(a, document.body);
+ToyReact.render(game, document.body);
+// console.log(game.vdom);
