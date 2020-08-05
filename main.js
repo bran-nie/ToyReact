@@ -89,6 +89,7 @@ class Game extends Component {
     }
 
     render() {
+        console.log(this.state);
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
@@ -109,6 +110,7 @@ class Game extends Component {
             status = "Next player: " + (this.state.xIsNext ? "X" : "O");
         }
 
+        console.log(status);
         return (
             <div className="game">
                 <div className="game-board">

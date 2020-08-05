@@ -45,6 +45,12 @@ class ElementWrapper {
     }
     mountTo(range) {
         this.range = range;
+        const placeholder = document.createComment("placeholder");
+        const endRange = document.createRange();
+        endRange.setStart(range.endContainer, range.endOffset);
+        endRange.setEnd(range.endContainer, range.endOffset);
+        endRange.insertNode(placeholder);
+
         range.deleteContents();
         let ele = document.createElement(this.type);
 
@@ -158,8 +164,8 @@ export class Component {
             };
 
             const replaceTree = (newTree, oldTree, indent) => {
-                console.log(indent + "new: vdom", newTree);
-                console.log(indent + "old: vdom", oldTree);
+                // console.log(indent + "new: vdom", newTree);
+                // console.log(indent + "old: vdom", oldTree);
                 if (isSameTree(newTree, oldTree)) return;
 
                 if (!isSameNode(newTree, oldTree)) {
@@ -169,7 +175,7 @@ export class Component {
                         replaceTree(
                             newTree.children[i],
                             oldTree.children[i],
-                            indent + "  "
+                            "  " + indent
                         );
                     }
                 }
