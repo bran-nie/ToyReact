@@ -1,4 +1,4 @@
-const childrenSymbol = Symbol("children");
+const childrenSymbol = Symbol('children');
 class ElementWrapper {
     constructor(type) {
         // this.root = document.createElement(type);
@@ -45,7 +45,7 @@ class ElementWrapper {
     }
     mountTo(range) {
         this.range = range;
-        const placeholder = document.createComment("placeholder");
+        const placeholder = document.createComment('placeholder');
         const endRange = document.createRange();
         endRange.setStart(range.endContainer, range.endOffset);
         endRange.setEnd(range.endContainer, range.endOffset);
@@ -60,8 +60,8 @@ class ElementWrapper {
                 let eventName = RegExp.$1.toLocaleLowerCase();
                 ele.addEventListener(eventName, value);
             }
-            if (name === "className") {
-                ele.setAttribute("class", value);
+            if (name === 'className') {
+                ele.setAttribute('class', value);
             } else {
                 ele.setAttribute(name, value);
             }
@@ -84,7 +84,7 @@ class ElementWrapper {
 class TextWrapper {
     constructor(content) {
         this.root = document.createTextNode(content);
-        this.type = "#text";
+        this.type = '#text';
         this.children = [];
         this.props = Object.create(null);
     }
@@ -126,26 +126,21 @@ export class Component {
                 if (node1.type !== node2.type) return false;
                 for (let name in node1.props) {
                     if (
-                        typeof node1.props[name] === "function" &&
-                        typeof node2.props[name] === "function" &&
-                        node1.props[name].toString() ===
-                            node2.props[name].toString()
+                        typeof node1.props[name] === 'function' &&
+                        typeof node2.props[name] === 'function' &&
+                        node1.props[name].toString() === node2.props[name].toString()
                     ) {
                         // continue;
                     }
                     if (
-                        typeof node1.props[name] === "object" &&
-                        typeof node2.props[name] === "object" &&
-                        JSON.stringify(node1.props[name]) ===
-                            JSON.stringify(node2.props[name].toString())
+                        typeof node1.props[name] === 'object' &&
+                        typeof node2.props[name] === 'object' &&
+                        JSON.stringify(node1.props[name]) === JSON.stringify(node2.props[name].toString())
                     ) {
                         continue;
                     }
                     if (node1.props[name] !== node2.props[name]) return false;
-                    if (
-                        Object.keys(node1.props).length !==
-                        Object.keys(node2.props).length
-                    ) {
+                    if (Object.keys(node1.props).length !== Object.keys(node2.props).length) {
                         return false;
                     }
                 }
@@ -154,11 +149,9 @@ export class Component {
 
             const isSameTree = (node1, node2) => {
                 if (!isSameNode(node1, node2)) return false;
-                if (node1.children.length !== node2.children.length)
-                    return false;
+                if (node1.children.length !== node2.children.length) return false;
                 for (let i = 0; i < node1.children.length; i++) {
-                    if (!isSameTree(node1.children[i], node2.children[i]))
-                        return false;
+                    if (!isSameTree(node1.children[i], node2.children[i])) return false;
                 }
                 return true;
             };
@@ -172,15 +165,11 @@ export class Component {
                     newTree.mountTo(oldTree.range);
                 } else {
                     for (let i = 0; i < newTree.children.length; i++) {
-                        replaceTree(
-                            newTree.children[i],
-                            oldTree.children[i],
-                            "  " + indent
-                        );
+                        replaceTree(newTree.children[i], oldTree.children[i], '  ' + indent);
                     }
                 }
             };
-            replaceTree(vdom, this.oldVdom, "");
+            replaceTree(vdom, this.oldVdom, '');
         } else {
             vdom.mountTo(this.range);
         }
@@ -195,8 +184,8 @@ export class Component {
     setState(state) {
         let merge = (oldState, newState) => {
             for (let p in newState) {
-                if (typeof newState[p] === "object" && newState[p] !== null) {
-                    if (typeof oldState[p] !== "object") {
+                if (typeof newState[p] === 'object' && newState[p] !== null) {
+                    if (typeof oldState[p] !== 'object') {
                         if (newState[p] instanceof Array) {
                             oldState[p] = [];
                         } else {
@@ -219,8 +208,9 @@ export class Component {
 
 export const ToyReact = {
     createElement(type, attr, ...children) {
+        console.log(type, attr, children);
         let ele;
-        if (typeof type === "string") {
+        if (typeof type === 'string') {
             ele = new ElementWrapper(type);
         } else {
             ele = new type();
@@ -232,11 +222,11 @@ export const ToyReact = {
 
         let insertChildren = (children) => {
             for (let child of children) {
-                if (typeof child === "object" && child instanceof Array) {
+                if (typeof child === 'object' && child instanceof Array) {
                     insertChildren(child);
                 } else {
                     if (child === null || child === void 0) {
-                        child = "";
+                        child = '';
                     }
                     if (
                         !(child instanceof Component) &&
@@ -245,7 +235,7 @@ export const ToyReact = {
                     ) {
                         child = String(child);
                     }
-                    if (typeof child === "string") {
+                    if (typeof child === 'string') {
                         child = new TextWrapper(child);
                     }
                     ele.appendChild(child);
